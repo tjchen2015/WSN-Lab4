@@ -31,7 +31,7 @@
  */
 
 import java.io.IOException;
-//import java.util.Scanner;
+import java.util.Scanner;
 
 import net.tinyos.message.*;
 import net.tinyos.packet.*;
@@ -46,30 +46,30 @@ public class Demo implements MessageListener {
     this.moteIF.registerListener(new RssiSendMsg(), this);
   }
 
-  /*public void userInput() {
+  public void userInput() {
     Scanner scanner = new Scanner(System.in);
   	while(true){
-  		System.out.println("Please input a number to show on the LEDs: ");
-  		int inputNum = scanner.nextInt();
+  		System.out.println("Please input a power value: ");
+  		short inputNum = (short) scanner.nextInt();
   		System.out.println();
   		
   		sendPackets(inputNum);
   	}
   }
   
-  public void sendPackets(int inputNum) {
+  public void sendPackets(short inputNum) {
     RssiSendMsg payload = new RssiSendMsg();
     
     try {
-  		System.out.println("Sending packet with input " + inputNum);
-  		payload.set_counter(inputNum);
-  		moteIF.send(0, payload);
+  		System.out.println("Sending packet with power " + inputNum);
+  		payload.set_power(inputNum);
+  		moteIF.send(1, payload);
     }
     catch (IOException exception) {
       System.err.println("Exception thrown when sending packets. Exiting.");
       System.err.println(exception);
     }
-  }*/
+  }
 
   public void messageReceived(int to, Message message) {
     RssiSendMsg msg = (RssiSendMsg)message;
@@ -105,7 +105,7 @@ public class Demo implements MessageListener {
 
     MoteIF mif = new MoteIF(phoenix);
     Demo serial = new Demo(mif);
-    //serial.userInput();
+    serial.userInput();
   }
 
 }

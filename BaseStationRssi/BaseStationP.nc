@@ -152,6 +152,7 @@ implementation
       if (!uartFull)
       {
         ret = uartQueue[uartIn];
+
         btrpkt = (BlinkToRadioMsg*)(call RadioPacket.getPayload(msg, sizeof(BlinkToRadioMsg)));
         btrpkt -> rssi = call CC2420Packet.getRssi(msg);
         btrpkt -> lqi = call CC2420Packet.getLqi(msg);

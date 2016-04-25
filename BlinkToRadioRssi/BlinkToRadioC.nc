@@ -46,7 +46,7 @@ module BlinkToRadioC {
   uses interface Packet;
   uses interface AMPacket;
   uses interface AMSend;
-  //uses interface Receive;
+  uses interface Receive;
   uses interface SplitControl as AMControl;
   uses interface CC2420Packet;
 }
@@ -54,21 +54,7 @@ implementation {
 
   message_t pkt;
   bool busy = FALSE;
-
-  /*void setLeds(uint16_t val) {
-  if (val & 0x01)
-  call Leds.led0On();
-  else 
-  call Leds.led0Off();
-  if (val & 0x02)
-  call Leds.led1On();
-  else
-  call Leds.led1Off();
-  if (val & 0x04)
-  call Leds.led2On();
-  else
-  call Leds.led2Off();
-  }*/
+  uint8_t power = SET_POWER;
 
   event void Boot.booted() {
     call AMControl.start();
@@ -93,12 +79,10 @@ implementation {
         return;
       }
       btrpkt->nodeid = TOS_NODE_ID;
-      btrpkt->power = SET_POWER;
-      call CC2420Packet.setPower(&pkt, SET_POWER);
-      if (call AMSend.send(AM_BROADCAST_ADDR, 
-        &pkt, sizeof(BlinkToRadioMsg)) == SUCCESS) {
+      btrpkt->power = power;
+      call CC2420Packet.setPower(&pkt, power);
+      if (call AMSend.send(AM_BROADCAST_ADDR, &pkt, sizeof(BlinkToRadioMsg)) == SUCCESS) {
         busy = TRUE;
-        call Leds.led0Toggle();
       }
     }
   }
@@ -109,11 +93,12 @@ implementation {
     }
   }
 
-  /*event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len){
+  event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len){
     if (len == sizeof(BlinkToRadioMsg)) {
       BlinkToRadioMsg* btrpkt = (BlinkToRadioMsg*)payload;
-      setLeds(btrpkt->counter);
+      call Leds.set(btrpkt->power);
+      power = btrpkt -> power;
     }
     return msg;
-  }*/    
+  }  
 }

@@ -48,7 +48,7 @@ implementation {
   components new TimerMilliC() as Timer0;
   components ActiveMessageC;
   components new AMSenderC(AM_BLINKTORADIOMSG);
-  //components new AMReceiverC(AM_BLINKTORADIOMSG);
+  components new AMReceiverC(AM_BLINKTORADIOMSG);
   components CC2420ActiveMessageC;
 
   App.Boot -> MainC;
@@ -58,6 +58,6 @@ implementation {
   App.AMPacket -> AMSenderC;
   App.AMControl -> ActiveMessageC;
   App.AMSend -> AMSenderC;
-  //App.Receive -> AMReceiverC;
+  App.Receive -> AMReceiverC;
   App.CC2420Packet -> CC2420ActiveMessageC;
 }
